@@ -3,7 +3,7 @@
 ## 1. 安装
 
 ```bash
-git clone https://github.com/<your-username>/go-skill.git ~/.claude/skills/go
+git clone https://github.com/ganggang-doctor/go.skill.git ~/.claude/skills/go
 chmod +x ~/.claude/skills/go/scripts/scan_skills.sh
 ```
 
