@@ -36,9 +36,31 @@ go（开工）v1.0 — 首次初始化
 
 配置已保存到 ~/.claude/go-config.json。
 以后你可以说 "go 重排" 来重新配置，或在安装新 skill 后 go 会自动检测。
+
+💡 推荐：配置 hook 实现每次对话自动启动 go（见 references/setup_guide.md）。
+   → 检测到未配置 hook: 提示 "[建议] 要自动启动 go 吗？复制以下配置到 ~/.claude/settings.json"
+   → 检测到已配置 hook: "✅ hook 已配置，go 将每次对话自动启动"
 ```
 
-**初始化后**：go 每次启动时自动对比 skills/ 目录与上次快照。检测到新增/删除 skill → 评估新 skill → 提示用户更新配置。
+### 错误恢复
+
+| 场景 | go 做什么 |
+|------|------|
+| 初始化中途中断 | 下次启动检测到 `go-config.json` 不完整 → "检测到未完成的初始化，重新开始？[y/n]" |
+| 扫描无结果 | "未检测到可匹配的 skill。请确认 ~/.claude/skills/ 目录中有已安装的 skill。" |
+| go-config.json 损坏 | 自动备份损坏文件 → 重新初始化 |
+| skill 全部删除后 | "当前无已安装 skill。go 将在你安装新 skill 后自动检测。" |
+
+### 用户首次使用检查清单
+
+```
+安装后，go 会自动检查：
+  ✅ ~/.claude/skills/ 目录存在且非空
+  ✅ scan_skills.sh 可执行
+  ✅ capability_tags.json 可读
+  ⚠️ hook 未配置 → 提示用户配置（非阻塞）
+  ⚠️ 无 auditor agent → 提示安装（非阻塞，仅影响阶段 4c 审计）
+```
 
 ---
 
