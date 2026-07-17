@@ -196,7 +196,7 @@ go 启动 → scan_skills.sh 扫描所有已安装 skill 的 name + description
     → 命中 keywords 得分 +1；命中 exclude_keywords 得分 = 0
     → 得分 > 0 的技能按分数降序排列 → 写入 go-config.json
     → 同一能力标签下多个 skill 时：调用内置 go-skill-selector 评分
-      (子 skill 位于 skills/skill-selector/，go 自带，无需额外安装)
+      (子 skill 位于 skills/go-skill-selector/，go 自带，无需额外安装)
     → 置信度 ≥80% 自动选择；<70% 提示用户确认
 ```
 
@@ -360,7 +360,7 @@ go 本身是一个纯调度层 skill。它依赖以下基础设施：
 |------|------|:---:|
 | `scripts/scan_skills.sh` | 扫描已安装 skill | ✅ (内置) |
 | `config/capability_tags.json` | 能力标签库 | ✅ (内置) |
-| `skills/skill-selector/` | 多候选 skill 评分引擎 | ✅ (内置子 skill) |
+| `skills/go-skill-selector/` | 多候选 skill 评分引擎 | ✅ (内置子 skill) |
 | `~/.claude/go-config.json` | 用户个性化配置（自动生成） | ✅ (自动生成) |
 | `auditor` agent | 高风险输出审计 | 推荐 (外部) |
 | `hallucination-guard` | 防幻觉包装器 | 推荐 (外部) |
