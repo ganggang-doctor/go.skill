@@ -129,8 +129,8 @@ go（开工）v1.0 — 首次初始化
     │
     ▼
 4c: AUDIT — 仅高风险输出（论文/数据/标书/hook修改）
-    ├─ 有 auditor agent → 派 agent: NEEDS WORK → 证据充分 → READY
-    └─ 无 auditor agent → go 内置 fallback:
+    ├─ 轻量模式 (go 内置): 引用抽查+数值抽查+文件完整性
+    └─ 完整模式 (skills/go-auditor/SKILL.md): NEEDS WORK默认+严重度分级+打回协议
         ① 抽查 3 条引用是否可追溯
         ② 抽查 3 个关键数值是否与源文件一致
         ③ 检查输出文件完整性
