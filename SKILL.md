@@ -385,8 +385,8 @@ go 本身是一个纯调度层 skill。它依赖以下基础设施：
 | `skills/go-skill-selector/` | 多候选 skill 评分引擎 | ✅ (内置子 skill) |
 | `~/.claude/go-config.json` | 用户个性化配置（自动生成） | ✅ (自动生成) |
 | `auditor` agent | 高风险输出审计 | 推荐 (外部) |
-| `hallucination-guard` | 防幻觉包装器 | 推荐 (外部) |
-| `engramory` | 记忆压缩防失忆 | 推荐 (外部，tinqiao-oss/engramory) |
+| `hallucination-guard` | 防幻觉包装器 | 推荐 |
+| `engramory` | 跨会话记忆（记住你的偏好/决策/项目背景） | 推荐——非 go 依赖，独立安装，配合使用效果更好。安装: `git clone https://github.com/tinqiao-oss/engramory.git ~/.claude/skills/engramory` + 将 rules-snippet.md 粘贴到 CLAUDE.md |
 
 **go 是完全自包含的。** 所有必需组件（扫描引擎、能力标签库、评分引擎）都内置于 go 的目录结构中，用户 clone 后即可使用，无需额外安装任何依赖。
 
