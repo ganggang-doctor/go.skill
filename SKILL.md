@@ -37,9 +37,13 @@ go（开工）v1.0 — 首次初始化
 配置已保存到 ~/.claude/go-config.json。
 以后你可以说 "go 重排" 来重新配置，或在安装新 skill 后 go 会自动检测。
 
-💡 推荐：配置 hook 实现每次对话自动启动 go（见 references/setup_guide.md）。
-   → 检测到未配置 hook: 提示 "[建议] 要自动启动 go 吗？复制以下配置到 ~/.claude/settings.json"
+💡 推荐：配置 hook 实现每次对话自动启动 go。
+   → 检测到未配置 hook: 主动输出可复制的配置代码，引导用户粘贴到 settings.json
    → 检测到已配置 hook: "✅ hook 已配置，go 将每次对话自动启动"
+   
+   ⚠️ 重要说明：Hook 配置是手动步骤（skill 不能自动修改 settings.json）。
+      但只需配置一次——之后每次对话 go 都会无条件自动启动，与提示词无关。
+      见 references/setup_guide.md 详细步骤。
 ```
 
 ### 错误恢复
