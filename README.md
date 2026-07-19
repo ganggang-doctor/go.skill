@@ -72,6 +72,26 @@ go（开工）v1.0 — 首次初始化
 阶段 4c: AUDIT     — 轻量模式 / 完整模式 (go-auditor)
 ```
 
+### 三层搜索 —— 指挥官定规则，工具箱出代码
+
+go 匹配到主 skill 后，不会让模型自己写代码——而是先搜现成的：
+
+```
+① 先搜主 Skill 自带的 scripts/ 和 references/
+   scipilot-figure 自带: profile_data.py / check_figure.py / visual_qa.py
+   → 有就直接用，不绕路
+
+② 主 Skill 没有 → 搜索已安装 Skill 的所有子 skill
+   生信 → SciAgent(200) / bioSkills(80) / scientific-agent(137)
+   作图 → 576 个含可运行 R/Python 代码的子 skill
+   → 找到现成代码直接用
+
+③ 都没有 → 才允许模型自己写代码
+   （这种情况很少——400+ 子 skill 覆盖了绝大多数分析场景）
+```
+
+**为什么这很重要？** DeepSeek 不知道你硬盘上有 576 个画图子 skill——它看到指挥官给了规则，就自己从头写 matplotlib 代码，参数不对，报错。go 的三层搜索填的就是这个鸿沟：指挥官定规则，工具箱出代码，两者必须配合。
+
 ### 能力标签系统（核心创新）
 
 **不硬编码任何 skill 名称。** go 内置 13 个能力标签，通过关键词匹配自动发现用户已安装的 skill：
