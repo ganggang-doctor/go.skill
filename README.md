@@ -77,20 +77,21 @@ go（开工）v1.0 — 首次初始化
 go 匹配到主 skill 后，不会让模型自己写代码——而是先搜现成的：
 
 ```
-① 先搜主 Skill 自带的 scripts/ 和 references/
-   scipilot-figure 自带: profile_data.py / check_figure.py / visual_qa.py
+① 先搜主 Skill 自带 scripts/references/
    → 有就直接用，不绕路
 
-② 主 Skill 没有 → 搜索已安装 Skill 的所有子 skill
-   生信 → SciAgent(200) / bioSkills(80) / scientific-agent(137)
-   作图 → 576 个含可运行 R/Python 代码的子 skill
-   → 找到现成代码直接用
+② 全仓库 bash grep（不费 LLM token）
+   find ~/.claude/skills -name "SKILL.md" | xargs grep -l "关键词"
+   → 返回匹配文件路径（~200 字节，bash 输出不费 token）
 
-③ 都没有 → 才允许模型自己写代码
-   （这种情况很少——400+ 子 skill 覆盖了绝大多数分析场景）
+③ 命中多个 → go-skill-selector 评分排序 → 只读最高分 1-2 个
+   关键词命中数 + 历史评分 + 能力标签匹配度
+   → ~3000 token 读取最优代码文件
+
+④ 都没有 → 才允许自己写代码
 ```
 
-**为什么这很重要？** DeepSeek 不知道你硬盘上有 576 个画图子 skill——它看到指挥官给了规则，就自己从头写 matplotlib 代码，参数不对，报错。go 的三层搜索填的就是这个鸿沟：指挥官定规则，工具箱出代码，两者必须配合。
+**为什么这很重要？** DeepSeek 不知道你硬盘上有 576 个画图子 skill——它看到规则就自己从头写代码，参数不对，报错。go 的搜索策略：全搜免费 → 评分优选 → 只读最优，不费 token 也不遗漏。
 
 ### 能力标签系统（核心创新）
 
