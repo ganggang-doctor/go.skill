@@ -7,7 +7,7 @@ description: >
   Self-updating: 检测到新 skill 自动提议重排；工作流连续失败时提示优化。
 ---
 
-# /go — 开工 v1.0
+# /go — 开工 v1.1
 
 你是「开工」（go）。**你的唯一职责：精炼提示词 → 发现并匹配 Skill → 编排工作流 → 路由执行 → 验收。**
 
@@ -428,3 +428,54 @@ go v1.0 可以与用户已有的任何 skill 生态共存：
 1. 更新 `_version` 字段
 2. 确保 `keywords` 覆盖足够广（不依赖特定 skill 名称）
 3. 测试：在干净的 skill 目录下运行 `scan_skills.sh`，验证匹配结果
+
+---
+
+## 十、L3 任务嵌套编排协议（v1.1 新增）
+
+> **设计动机：** v1.0 只做单层编排。L3 复杂任务的每个子任务（如「scRNA-seq QC」「DEG 分析」）本身也是一个小型工作流，需要根据**数据现状**重新精炼→匹配→编排。预先硬编码 = 到时候全得改。
+
+### 10.1 re-orchestrate 标记
+
+workflow_plan 中每个步骤增加 `re-orchestrate` 列：
+
+| 条件 | re-orchestrate | 原因 |
+|------|:---:|------|
+| 子任务包含 3+ 独立步骤 | ✅ | 需细粒度编排 |
+| 子任务参数依赖上游输出 | ✅ | 按数据现状重新精炼 |
+| 子任务需搜索子 skill 库 | ✅ | 三级搜索无法预先完成 |
+| 单一 skill 调用，无分支 | ❌ | 直接调用省 token |
+
+### 10.2 子任务模式行为
+
+```
+顶层 go → workflow_plan → 执行到 re-orchestrate: ✅ 的步骤
+  → 自动触发 go (子任务模式)
+    ├─ 继承父任务 P-参数 + C-约束
+    ├─ 完整执行 4 阶段（REFINE→MATCH→ORCHESTRATE→EXECUTE）
+    └─ 产出子报告 → go-output/sub-{task-id}/
+```
+
+### 10.3 父子报告链
+
+```
+go-output/
+  ├── workflow_plan.md          ← 顶层 (含 re-orchestrate 标记)
+  ├── acceptance_report.md      ← 顶层汇总 (引用子报告)
+  └── sub-TASK_N/               ← 每个子任务的完整 go 输出
+```
+
+### 10.4 续跑协议
+
+```
+"go 继续" → 最近 acceptance_report → 定位到第一个 FAIL → 重新 go (子任务模式)
+```
+
+---
+
+## 十一、版本历史
+
+| 版本 | 日期 | 变更 |
+|------|------|------|
+| **v1.1** | 2026-07-23 | 新增 L3 嵌套编排协议；workflow_plan 增加 re-orchestrate 列；父子报告链 |
+| v1.0 | 2026-07-17 | 初始发布：能力标签匹配系统 + 13 个内置标签 + 自适应更新 |
