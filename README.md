@@ -1,4 +1,4 @@
-# go（开工）— 科研工作流 AI 指挥中心 v1.1
+# go（开工）— 科研工作流 AI 指挥中心 v1.2
 
 > **完全自包含——clone 即用，零额外依赖。**
 > 专为 DeepSeek 等非 Claude 后端设计——解决 skill 无法自动触发、子 skill 从未被发现的根本问题。
@@ -222,6 +222,11 @@ go 会提示"未检测到可匹配的 skill"，然后正常终止。go 是调度
 [@ganggang-doctor](https://github.com/ganggang-doctor)
 
 ## Changelog
+
+### v1.2 (2026-07-19)
+- **递归编排**：单步成功但发现新需求时，动态搜索子 skill 仓库 + 自动插入步骤（如检测到批次效应→插入 batch correction）
+- **子任务拆分+并行**：单步内部可拆多个子步骤，并行执行（如 出图→UMAP+火山+热图 同时生成）
+- 版本号统一为 v1.2（服务器 go + GitHub v1.2）
 
 ### v1.1 (2026-07-18)
 - **三层搜索策略**：bash grep 全仓库搜索（免费）→ go-skill-selector 评分选最优 → 只读 1-2 个文件（~3000 token）
